@@ -1,1 +1,15 @@
 read
+WITH wildlife WHERE IS NOT NULL
+
+
+LOAD CSV WITH HEADERS FROM "file:///wildlife_a2.csv" as wildlife
+LOAD CSV WITH HEADERS FROM "file:///parks_a2.csv" as parks 
+WITH parks, wildlife
+
+
+MERGE (park: Park {parkid: parks.ParkID, area: toInteger(parks.AreaInAcres), latitude: toInteger(parks.Latitude), longitude: toInteger(parks.Longitude), statecode: parks.StateCode, parkestday: toInteger(parks.ParkEstDay), parkestmonth: toInteger(parks.ParkEstMonth), parkestyear: toInteger(parks.ParkEstYear), parkname: parks.ParkName})
+MERGE (animals: Wildlife {speciesid: wildlife.SpeciesID, parkname: wildlife.ParkName, scientificName: wildlife.ScientificName, commonames: Split(wildlife.CommonNames, ","), recordstatus: wildlife.RecordStatus})
+WITH animals,park,wildlife,parks 
+MATCH (animals) WHERE wildlife.Abundance <> "NA"
+MERGE (abundance: Abundance {abundancename: wildlife.Abundance})
+MERGE (animals) -[:abundance_is]-> (abundance)
