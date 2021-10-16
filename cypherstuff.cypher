@@ -11,47 +11,48 @@ WITH animals,park,wildlife,parks
 MATCH (park:Park), (animals:Wildlife) WHERE park.parkname = animals.parkname MERGE (park) -[:has]-> (animals)
 WITH animals,park,wildlife,parks 
 
-WHERE wildlife.Category  <> "NA"
-MERGE (category: Category {category: wildlife.Category})
+MATCH (w: animals) WHERE w.Category  <> "NA"
+MERGE (category: Category {category: w.Category})
 MERGE (animals) -[:category_is]-> (category)
-WITH animals,park,wildlife,parks 
+WITH animals,park,wildlife,parks    
 
 
-WHERE wildlife.Order  <> "NA"
-MERGE (order: Order {ordername: wildlife.Order})
+MATCH (w: animals) WHERE w.Order  <> "NA"
+MERGE (order: Order {ordername: w.Order})
 MERGE (animals) -[:order_is]-> (order)
 WITH  animals,park,wildlife,parks
 
-WHERE wildlife.Family <> "NA"
-MERGE (family: Family {familyname: wildlife.Family})
+MATCH (w: animals) WHERE w.Family <> "NA"
+MERGE (family: Family {familyname: w.Family})
 MERGE (animals) -[:family_is]-> (family)
 WITH  animals,park,wildlife,parks
 
 
-WHERE wildlife.ConservationStatus <> "NA"
-MERGE (conservationstatus: ConservationStatus {conservationstatusname: wildlife.ConservationStatus})
+MATCH (w: animals) WHERE w.ConservationStatus <> "NA"
+MERGE (conservationstatus: ConservationStatus {conservationstatusname: w.ConservationStatus})
 MERGE (animals) -[:conservation_status_is]-> (conservationstatus)
 WITH  animals,park,wildlife,parks
 
 
-WHERE wildlife.Nativeness <> "NA"
-MERGE (nativeness: Nativeness {nativenessname: wildlife.Nativeness})
+MATCH (w: animals) WHERE w.Nativeness <> "NA"
+MERGE (nativeness: Nativeness {nativenessname: w.Nativeness})
 MERGE (animals) -[:nativeness_is]-> (nativeness)
 WITH  animals,park,wildlife,parks
 
-WHERE wildlife.Occurence <> "NA"
-MERGE (occurrence: Occurrence {occurencename: wildlife.Occurence})
+MATCH (w: animals) WHERE w.Occurence <> "NA"
+MERGE (occurrence: Occurrence {occurencename: w.Occurence})
 MERGE (animals) -[:occurrence_is]-> (occurrence)
 WITH animals,park,wildlife,parks
 
-WHERE wildlife.Seasonality <> "NA"
+MATCH (w: animals) WHERE w.Seasonality <> "NA"
 MERGE (seasonality: Seasonality {seasonalityname: wildlife.Seasonality})
 MERGE (animals) -[:seasonality_is]-> (seasonality)
 WITH  animals,park,wildlife,parks
 
-WHERE wildlife.Abundance <> "NA"
-MERGE (abundance: Abundance {abundancename: wildlife.Abundance})
+MATCH (w: animals) WHERE w.Abundance <> "NA"
+MERGE (abundance: Abundance {abundancename: w.Abundance})
 MERGE (animals) -[:abundance_is]-> (abundance)
+
 
 
 
