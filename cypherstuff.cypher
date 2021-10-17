@@ -179,6 +179,78 @@ RETURN stateName  AS state,
 ///top 3 states with most parks
 
 
+match  (park:Park)
+unwind park.statecode as stateName
+RETURN stateName  AS state, 
+       count(park.parkid) As noparks
 
 
+//Index
+
+CREATE INDEX category_index FOR (animal: Wildlife) ON (animal.category)
+
+CREATE INDEX commonnames_index FOR (animal: Wildlife) ON (animal.commonnames)
+
+CREATE INDEX order_index FOR (order: Order) ON (order.ordername)
+
+CREATE INDEX area_index FOR (park: Park) ON (park.area)
+
+CREATE INDEX statecode_index FOR (park: Park) ON (park.statecode)
+
+CREATE INDEX parkid_index FOR (park: Park) ON (park.parkid)
+
+////////////Insert data
+
+///1
+
+MERGE (p:Park{parkname: "Rainbow Wonderland"})
+SET p.parkid = "RAWO"
+
+MERGE (a:Wildlife{scientificName: "unicorn"})
+SET a.speciesid= "00007"
+SET a.commonames= ["unicorn"]
+
+
+MERGE (f:Family{familyname: "unicorn family"})
+
+
+MERGE (o:Order{ordername: "unicorn order"})
+
+
+MERGE (c:Category{category: "mythical creature"})
+
+MERGE (p)-[:has]->(a)
+MERGE (a)-[:category_is]->(c)
+MERGE (a)-[:order_is]->(o)
+MERGE (a)-[:family_is]->(f)
+RETURN a,p,c,o,f
+
+//2 
+
+
+
+
+MERGE (nia:Nativeness{nativenessname: "Near-Nativeness"}) 
+WITH nia
+MATCH (a: Wildlife) -[:category_is]->(c) WHERE c.category = "MAMMAL"
+MATCH (a) -[ni:nativeness_is]->(n) WHERE n.nativenessname ="UNKNOWN"
+DELETE ni
+WITH a, c, n,nia
+MERGE (a) -[:category_is]->(nia)
+
+
+//3 
+
+
+MATCH (p:Park)-[h:has]->(w:Wildlife) WHERE p.parkname = "MESA VERDE NATIONAL PARK" MATCH (w)-[ca:category_is]->(c:Category) 
+MATCH (w)-[oi:occurrence_is]->(o:Occurrence) 
+MATCH (w)-[ni:nativeness_is]->(n:Nativeness) 
+MATCH (w)-[ordi:order_is]->(ord:Order) 
+MATCH (w)-[fi:family_is]->(f:Family)
+MATCH (w)-[ci:category_is]->(c:Category)  
+MATCH (w)-[ai:abundance_is]->(a:Abundance)  
+MATCH (w)-[si:seasonality_is]->(s:Seasonality)  
+MATCH (w)-[csi:conservation_status_is]->(cs:ConservationStatus)  
+
+DETACH DELETE p,w,c,o,n,ord,f,s,cs,a
 
