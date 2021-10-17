@@ -5,114 +5,127 @@
 
 
 
-//1
+//1 ok
 LOAD CSV WITH HEADERS FROM "file:///wildlife_a2.csv" as wildlife
 LOAD CSV WITH HEADERS FROM "file:///parks_a2.csv" as parks 
 WITH parks, wildlife
-MERGE (park: Park {parkid: parks.ParkID, area: toInteger(parks.AreaInAcres), latitude: toInteger(parks.Latitude), longitude: toInteger(parks.Longitude), statecode: parks.StateCode, parkestday: toInteger(parks.ParkEstDay), parkestmonth: toInteger(parks.ParkEstMonth), parkestyear: toInteger(parks.ParkEstYear), parkname: parks.ParkName})
+MERGE (park: Park {parkid: parks.ParkID, area: toInteger(parks.AreaInAcres), latitude: toInteger(parks.Latitude), longitude: toInteger(parks.Longitude), statecode: Split(parks.StateCode, ","), parkestday: toInteger(parks.ParkEstDay), parkestmonth: toInteger(parks.ParkEstMonth), parkestyear: toInteger(parks.ParkEstYear), parkname: parks.ParkName})
 MERGE (animals: Wildlife {speciesid: wildlife.SpeciesID, parkname: wildlife.ParkName, scientificName: wildlife.ScientificName, commonames: Split(wildlife.CommonNames, ","), recordstatus: wildlife.RecordStatus})
 WITH animals,park,wildlife,parks 
 
 MATCH (park:Park), (animals:Wildlife) WHERE park.parkname = animals.parkname MERGE (park) -[:has]-> (animals)
-WITH animals,park,wildlife,parks 
+ 
 
-//2
+//2 ok
 LOAD CSV WITH HEADERS FROM "file:///wildlife_a2.csv" as wildlife
 LOAD CSV WITH HEADERS FROM "file:///parks_a2.csv" as parks 
 WITH parks, wildlife
-MERGE (park: Park {parkid: parks.ParkID, area: toInteger(parks.AreaInAcres), latitude: toInteger(parks.Latitude), longitude: toInteger(parks.Longitude), statecode: parks.StateCode, parkestday: toInteger(parks.ParkEstDay), parkestmonth: toInteger(parks.ParkEstMonth), parkestyear: toInteger(parks.ParkEstYear), parkname: parks.ParkName})
+MERGE (park: Park {parkid: parks.ParkID, area: toInteger(parks.AreaInAcres), latitude: toInteger(parks.Latitude), longitude: toInteger(parks.Longitude), statecode: Split(parks.StateCode, ","), parkestday: toInteger(parks.ParkEstDay), parkestmonth: toInteger(parks.ParkEstMonth), parkestyear: toInteger(parks.ParkEstYear), parkname: parks.ParkName})
 MERGE (animals: Wildlife {speciesid: wildlife.SpeciesID, parkname: wildlife.ParkName, scientificName: wildlife.ScientificName, commonames: Split(wildlife.CommonNames, ","), recordstatus: wildlife.RecordStatus})
 WITH animals,park,wildlife,parks 
 
 MATCH (animals) WHERE wildlife.Category  <> "NA"
 MERGE (category: Category {category: wildlife.Category})
 MERGE (animals) -[:category_is]-> (category)
-WITH animals,park,wildlife,parks    
 
-//3
+
+//3 ok 
 LOAD CSV WITH HEADERS FROM "file:///wildlife_a2.csv" as wildlife
 LOAD CSV WITH HEADERS FROM "file:///parks_a2.csv" as parks 
 WITH parks, wildlife
-MERGE (park: Park {parkid: parks.ParkID, area: toInteger(parks.AreaInAcres), latitude: toInteger(parks.Latitude), longitude: toInteger(parks.Longitude), statecode: parks.StateCode, parkestday: toInteger(parks.ParkEstDay), parkestmonth: toInteger(parks.ParkEstMonth), parkestyear: toInteger(parks.ParkEstYear), parkname: parks.ParkName})
+MERGE (park: Park {parkid: parks.ParkID, area: toInteger(parks.AreaInAcres), latitude: toInteger(parks.Latitude), longitude: toInteger(parks.Longitude), statecode: Split(parks.StateCode, ","), parkestday: toInteger(parks.ParkEstDay), parkestmonth: toInteger(parks.ParkEstMonth), parkestyear: toInteger(parks.ParkEstYear), parkname: parks.ParkName})
 MERGE (animals: Wildlife {speciesid: wildlife.SpeciesID, parkname: wildlife.ParkName, scientificName: wildlife.ScientificName, commonames: Split(wildlife.CommonNames, ","), recordstatus: wildlife.RecordStatus})
 WITH animals,park,wildlife,parks 
 
 MATCH (animals) WHERE wildlife.Order  <> "NA"
 MERGE (order: Order {ordername: wildlife.Order})
 MERGE (animals) -[:order_is]-> (order)
+
+
+
+//4 ok 
+LOAD CSV WITH HEADERS FROM "file:///wildlife_a2.csv" as wildlife
+LOAD CSV WITH HEADERS FROM "file:///parks_a2.csv" as parks 
+WITH parks, wildlife
+MERGE (park: Park {parkid: parks.ParkID, area: toInteger(parks.AreaInAcres), latitude: toInteger(parks.Latitude), longitude: toInteger(parks.Longitude), statecode: Split(parks.StateCode, ","), parkestday: toInteger(parks.ParkEstDay), parkestmonth: toInteger(parks.ParkEstMonth), parkestyear: toInteger(parks.ParkEstYear), parkname: parks.ParkName})
+MERGE (animals: Wildlife {speciesid: wildlife.SpeciesID, parkname: wildlife.ParkName, scientificName: wildlife.ScientificName, commonames: Split(wildlife.CommonNames, ","), recordstatus: wildlife.RecordStatus})
 WITH  animals,park,wildlife,parks
 
-
-//4
 MATCH (animals) WHERE wildlife.Family <> "NA"
 MERGE (family: Family {familyname: wildlife.Family})
 MERGE (animals) -[:family_is]-> (family)
-WITH  animals,park,wildlife,parks
 
+///5 ok 
+LOAD CSV WITH HEADERS FROM "file:///wildlife_a2.csv" as wildlife
+LOAD CSV WITH HEADERS FROM "file:///parks_a2.csv" as parks 
+WITH parks, wildlife
+MERGE (park: Park {parkid: parks.ParkID, area: toInteger(parks.AreaInAcres), latitude: toInteger(parks.Latitude), longitude: toInteger(parks.Longitude), statecode: Split(parks.StateCode, ","), parkestday: toInteger(parks.ParkEstDay), parkestmonth: toInteger(parks.ParkEstMonth), parkestyear: toInteger(parks.ParkEstYear), parkname: parks.ParkName})
+MERGE (animals: Wildlife {speciesid: wildlife.SpeciesID, parkname: wildlife.ParkName, scientificName: wildlife.ScientificName, commonames: Split(wildlife.CommonNames, ","), recordstatus: wildlife.RecordStatus})
+WITH  animals,park,wildlife,parks
 
 MATCH (animals) WHERE wildlife.ConservationStatus <> "NA"
 MERGE (conservationstatus: ConservationStatus {conservationstatusname: wildlife.ConservationStatus})
 MERGE (animals) -[:conservation_status_is]-> (conservationstatus)
-WITH  animals,park,wildlife,parks
-//5
+
+//6 ok
 
 LOAD CSV WITH HEADERS FROM "file:///wildlife_a2.csv" as wildlife
 LOAD CSV WITH HEADERS FROM "file:///parks_a2.csv" as parks 
 WITH parks, wildlife
 
-MERGE (park: Park {parkid: parks.ParkID, area: toInteger(parks.AreaInAcres), latitude: toInteger(parks.Latitude), longitude: toInteger(parks.Longitude), statecode: parks.StateCode, parkestday: toInteger(parks.ParkEstDay), parkestmonth: toInteger(parks.ParkEstMonth), parkestyear: toInteger(parks.ParkEstYear), parkname: parks.ParkName})
+MERGE (park: Park {parkid: parks.ParkID, area: toInteger(parks.AreaInAcres), latitude: toInteger(parks.Latitude), longitude: toInteger(parks.Longitude), statecode: Split(parks.StateCode, ","), parkestday: toInteger(parks.ParkEstDay), parkestmonth: toInteger(parks.ParkEstMonth), parkestyear: toInteger(parks.ParkEstYear), parkname: parks.ParkName})
 MERGE (animals: Wildlife {speciesid: wildlife.SpeciesID, parkname: wildlife.ParkName, scientificName: wildlife.ScientificName, commonames: Split(wildlife.CommonNames, ","), recordstatus: wildlife.RecordStatus})
 WITH animals,park,wildlife,parks 
 
 MATCH (animals) WHERE wildlife.Seasonality <> "NA"
 MERGE (seasonality: Seasonality {seasonalityname: wildlife.Seasonality})
 MERGE (animals) -[:seasonality_is]-> (seasonality)
-//6
+//7 ok
 LOAD CSV WITH HEADERS FROM "file:///wildlife_a2.csv" as wildlife
 LOAD CSV WITH HEADERS FROM "file:///parks_a2.csv" as parks 
 WITH parks, wildlife
-MERGE (park: Park {parkid: parks.ParkID, area: toInteger(parks.AreaInAcres), latitude: toInteger(parks.Latitude), longitude: toInteger(parks.Longitude), statecode: parks.StateCode, parkestday: toInteger(parks.ParkEstDay), parkestmonth: toInteger(parks.ParkEstMonth), parkestyear: toInteger(parks.ParkEstYear), parkname: parks.ParkName})
+MERGE (park: Park {parkid: parks.ParkID, area: toInteger(parks.AreaInAcres), latitude: toInteger(parks.Latitude), longitude: toInteger(parks.Longitude), statecode: Split(parks.StateCode, ","), parkestday: toInteger(parks.ParkEstDay), parkestmonth: toInteger(parks.ParkEstMonth), parkestyear: toInteger(parks.ParkEstYear), parkname: parks.ParkName})
 MERGE (animals: Wildlife {speciesid: wildlife.SpeciesID, parkname: wildlife.ParkName, scientificName: wildlife.ScientificName, commonames: Split(wildlife.CommonNames, ","), recordstatus: wildlife.RecordStatus})
 WITH animals,park,wildlife,parks 
 
 MATCH (animals) WHERE wildlife.Nativeness <> "NA"
 MERGE (nativeness: Nativeness {nativenessname: wildlife.Nativeness})
 MERGE (animals) -[:nativeness_is]-> (nativeness)
-WITH  animals,park,wildlife,parks
-//7
+
+//8 ok
 
 LOAD CSV WITH HEADERS FROM "file:///wildlife_a2.csv" as wildlife
 LOAD CSV WITH HEADERS FROM "file:///parks_a2.csv" as parks 
 WITH parks, wildlife
-MERGE (park: Park {parkid: parks.ParkID, area: toInteger(parks.AreaInAcres), latitude: toInteger(parks.Latitude), longitude: toInteger(parks.Longitude), statecode: parks.StateCode, parkestday: toInteger(parks.ParkEstDay), parkestmonth: toInteger(parks.ParkEstMonth), parkestyear: toInteger(parks.ParkEstYear), parkname: parks.ParkName})
+MERGE (park: Park {parkid: parks.ParkID, area: toInteger(parks.AreaInAcres), latitude: toInteger(parks.Latitude), longitude: toInteger(parks.Longitude), statecode: Split(parks.StateCode, ","), parkestday: toInteger(parks.ParkEstDay), parkestmonth: toInteger(parks.ParkEstMonth), parkestyear: toInteger(parks.ParkEstYear), parkname: parks.ParkName})
 MERGE (animals: Wildlife {speciesid: wildlife.SpeciesID, parkname: wildlife.ParkName, scientificName: wildlife.ScientificName, commonames: Split(wildlife.CommonNames, ","), recordstatus: wildlife.RecordStatus})
 WITH animals,park,wildlife,parks 
 
 MATCH (animals) WHERE wildlife.Occurrence <> "NA"
 MERGE (occurrence: Occurrence {occurencename: wildlife.Occurrence})
 MERGE (animals) -[:occurrence_is]-> (occurrence)
-WITH animals,park,wildlife,parks
 
-//8
+
+//9XX
 LOAD CSV WITH HEADERS FROM "file:///wildlife_a2.csv" as wildlife
 LOAD CSV WITH HEADERS FROM "file:///parks_a2.csv" as parks 
 WITH parks, wildlife
 
-MERGE (park: Park {parkid: parks.ParkID, area: toInteger(parks.AreaInAcres), latitude: toInteger(parks.Latitude), longitude: toInteger(parks.Longitude), statecode: parks.StateCode, parkestday: toInteger(parks.ParkEstDay), parkestmonth: toInteger(parks.ParkEstMonth), parkestyear: toInteger(parks.ParkEstYear), parkname: parks.ParkName})
+MERGE (park: Park {parkid: parks.ParkID, area: toInteger(parks.AreaInAcres), latitude: toInteger(parks.Latitude), longitude: toInteger(parks.Longitude), statecode: Split(parks.StateCode, ","), parkestday: toInteger(parks.ParkEstDay), parkestmonth: toInteger(parks.ParkEstMonth), parkestyear: toInteger(parks.ParkEstYear), parkname: parks.ParkName})
 MERGE (animals: Wildlife {speciesid: wildlife.SpeciesID, parkname: wildlife.ParkName, scientificName: wildlife.ScientificName, commonames: Split(wildlife.CommonNames, ","), recordstatus: wildlife.RecordStatus})
 WITH animals,park,wildlife,parks 
 MATCH (animals) WHERE wildlife.Seasonality <> "NA"
 MERGE (seasonality: Seasonality {seasonalityname: wildlife.Seasonality})
 MERGE (animals) -[:seasonality_is]-> (seasonality)
-WITH  animals,park,wildlife,parks
 
 
-///9
+
+///10
 LOAD CSV WITH HEADERS FROM "file:///wildlife_a2.csv" as wildlife
 LOAD CSV WITH HEADERS FROM "file:///parks_a2.csv" as parks 
 WITH parks, wildlife
 
-MERGE (park: Park {parkid: parks.ParkID, area: toInteger(parks.AreaInAcres), latitude: toInteger(parks.Latitude), longitude: toInteger(parks.Longitude), statecode: parks.StateCode, parkestday: toInteger(parks.ParkEstDay), parkestmonth: toInteger(parks.ParkEstMonth), parkestyear: toInteger(parks.ParkEstYear), parkname: parks.ParkName})
+MERGE (park: Park {parkid: parks.ParkID, area: toInteger(parks.AreaInAcres), latitude: toInteger(parks.Latitude), longitude: toInteger(parks.Longitude), statecode: Split(parks.StateCode, ","), parkestday: toInteger(parks.ParkEstDay), parkestmonth: toInteger(parks.ParkEstMonth), parkestyear: toInteger(parks.ParkEstYear), parkname: parks.ParkName})
 MERGE (animals: Wildlife {speciesid: wildlife.SpeciesID, parkname: wildlife.ParkName, scientificName: wildlife.ScientificName, commonames: Split(wildlife.CommonNames, ","), recordstatus: wildlife.RecordStatus})
 WITH animals,park,wildlife,parks 
 MATCH (animals) WHERE wildlife.Abundance <> "NA"
@@ -123,47 +136,47 @@ MERGE (animals) -[:abundance_is]-> (abundance)
 
 
 
-
-
-
-
-
-
-
-
-//////ANd then 
-
-MATCH (p:Park), (w:Wildlife) WHERE p.parkname = w.wildlife MERGE (p) -[:has]-> (w)
-
-//////ANd then 
-
-
-
-
-
-///////Count the number of species in each family. Display the counting result in descending order and limit the top 5 in the output
+///////1. Count the number of species in each family. Display the counting result in descending order and limit the top 5 in the output
 
 
 MATCH (animal:Wildlife)-[:family_is]->(family:Family) WITH family, count(animal) as NoSpecies RETURN family, NoSpecies ORDER BY NoSpecies DESC LIMIT 5
 
-/////// Show all unique ScientificNames that with conditions of ‘BIRD’ category, ‘PASSERIFORMES’ order and ‘PRESENT’ occurrence in ascending order and lower case
+///////2.  Show all unique ScientificNames that with conditions of ‘BIRD’ category, ‘PASSERIFORMES’ order and ‘PRESENT’ occurrence in ascending order and lower case
 
 MATCH (animal:Wildlife)-[a:category_is]->(Category: Category ) WHERE Category.category = "BIRD"
 MATCH (animal)-[o:order_is]->(order: Order ) WHERE order.ordername = "PASSERIFORMES" 
-MATCH (animal) WHERE animal.occurrence = "PRESENT" RETURN DISTINCT toLower(animal.scientificName) ORDER BY toLower(animal.scientificName)
+MATCH (animal)-[oc:occurrence_is]->(occurence: Occurrence ) WHERE occurence.occurencename = "PRESENT" RETURN DISTINCT toLower(animal.scientificName) ORDER BY toLower(animal.scientificName)
 
-//////Count the number of species of each Park with a range of 90,000 - 210,000 (both inclusive) AreaAcres
+//////3. Count the number of species of each Park with a range of 90,000 - 210,000 (both inclusive) AreaAcres
 
 
 MATCH (park:Park)-[h:has]->(a: Wildlife )  WHERE park.area <= 210000 AND park.area >= 90000 WITH park, count(a) as noSpecies  RETURN park, noSpecies
 
-///List all unique categories that contain ‘YELLOW’ as part of the content in CommonNames.
+///4. List all unique categories that contain ‘YELLOW’ as part of the content in CommonNames.
 
 MATCH (animal:Wildlife)-[ci:category_is]->(c: Category ) WHERE ANY (name IN animal.commonames WHERE name=~ '(?i).*YELLOW.*') RETURN DISTINCT c;
 
-///////
+///////5. Mentuioned you thought about filtering to only compare to CA parks however some parks closest to PINN could be also in anohter state due to area 
 
 
+
+MATCH (pinnPark:Park) WHERE pinnPark.parkid = "PINN" WITH pinnPark
+MATCH (park:Park) WHERE park.parkid <> "PINN"
+WITH point({longitude: pinnPark.longitude, latitude: pinnPark.latitude}) AS pointOne, point({longitude: park.longitude, latitude: park.latitude}) AS pointTwo, park, pinnPark
+RETURN round(distance(pointOne, pointTwo)) AS distanceFromPinn, park, pinnPark  ORDER BY distanceFromPinn LIMIT 1
+
+//// Average area in acres of each state
+
+
+match  (park:Park)
+unwind park.statecode as stateName
+RETURN stateName  AS state, 
+       round(AVG(toFloat(park.area)), 3) As avg
+
+
+
+
+///top 3 states with most parks
 
 
 
